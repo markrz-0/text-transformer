@@ -1,4 +1,4 @@
-package pl.put.poznan.texttransformer.app;
+package pl.put.poznan.texttransformer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
