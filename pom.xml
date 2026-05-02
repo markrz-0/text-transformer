@@ -12,7 +12,8 @@
     </parent>
 
     <groupId>pl.put.poznan</groupId>
-    <artifactId>io-project-architecture</artifactId>
+    <artifactId>text-transformer</artifactId>
+    <name>Text Transformer App</name>
     <version>0.1</version>
 
 	<properties>
