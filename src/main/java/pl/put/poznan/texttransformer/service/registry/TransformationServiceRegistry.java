@@ -2,10 +2,12 @@ package pl.put.poznan.texttransformer.service.registry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import pl.put.poznan.texttransformer.service.TransformerService;
 
 import java.util.Map;
 
+@Service
 public class TransformationServiceRegistry {
     private static final Logger logger = LoggerFactory.getLogger(TransformationServiceRegistry.class);
 
