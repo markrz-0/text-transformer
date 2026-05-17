@@ -1,0 +1,29 @@
+name: Build Documentation (JavaDoc)
+
+# Kiedy uruchamiamy? Przy każdym pushu do głównej gałęzi
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Pobranie kodu repozytorium
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # 2. Instalacja Javy (tu wpisana 17, dopasujcie do swojej wersji np. 11)
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    # 3. Wygenerowanie dokumentacji JavaDoc
+    - name: Generate JavaDoc with Maven
+      run: mvn -B javadoc:javadoc
