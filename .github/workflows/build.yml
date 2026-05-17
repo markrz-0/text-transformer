@@ -50,6 +50,7 @@ jobs:
           retention-days: 7
 
       - name: Create and Push Git Tag
+        id: tag_repo
         if: github.event_name == 'push' && !contains(steps.get_version.outputs.CURRENT_VERSION, 'SNAPSHOT')
         run: |
           git config user.name "github-actions[bot]"
@@ -59,14 +60,16 @@ jobs:
 
           if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
             echo "Tag $TAG_NAME already exists. Skipping tagging."
+            echo "TAG_CREATED=false" >> $GITHUB_OUTPUT # <-- Report that we skipped
           else
             echo "Tagging repository with $TAG_NAME"
-            git tag "$TAG_NAME"
+            git tag -a "$TAG_NAME" -m "Release $TAG_NAME"
             git push origin "$TAG_NAME"
+            echo "TAG_CREATED=true" >> $GITHUB_OUTPUT # <-- Report that we succeeded
           fi
 
       - name: Create GitHub Release
-        if: github.event_name == 'push' && !contains(steps.get_version.outputs.CURRENT_VERSION, 'SNAPSHOT')
+        if: github.event_name == 'push' && !contains(steps.get_version.outputs.CURRENT_VERSION, 'SNAPSHOT') && steps.tag_repo.outputs.TAG_CREATED == 'true'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.get_version.outputs.CURRENT_VERSION }}
