@@ -39,3 +39,4 @@ Returns JSON
 |`reverse`|reverse the order of letters while preserving the case|`MirEk` -> `KerIm`|
 |`repeated-words`|removes consecutive repeated words|`my my super super super text` -> `my super text`|
 |`expand`|expands acronyms to full forms with case preservation|`prof.` -> `professor`, `dr` -> `doctor`, `e.g.` -> `for example`, `aso` -> `and so on`. Preserves case: `E.g.` -> `For example`, `E.G.` -> `FOR EXAMPLE`|
+|`shorten`|shortens phrases to acronyms with case preservation|`for example` -> `e.g.`, `among others` -> `i.a.`, `and so on` -> `aso`. Preserves case: `For example` -> `E.g.`, `FOR EXAMPLE` -> `E.G.`|
