@@ -1,4 +1,4 @@
-name: Build and Save JAR
+name: Build, Tag, and Save JAR
 
 on:
   push:
@@ -10,23 +10,49 @@ jobs:
   build-jar:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: maven
+      - name: Read version from pom.xml
+        id: get_version
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "CURRENT_VERSION=$VERSION" >> $GITHUB_OUTPUT
 
-    - name: Build JAR with Maven
-      run: mvn -B clean package -DskipTests
+      - name: Create and Push Git Tag
+        if: github.event_name == 'push' && !contains(steps.get_version.outputs.CURRENT_VERSION, 'SNAPSHOT')
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          TAG_NAME="v${{ steps.get_version.outputs.CURRENT_VERSION }}"
 
-    - name: Upload JAR as artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: text-transformer-app
-        path: target/*.jar
+          if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
+            echo "Tag $TAG_NAME already exists. Skipping tagging."
+          else
+            echo "Tagging repository with $TAG_NAME"
+            git tag "$TAG_NAME"
+            git push origin "$TAG_NAME"
+          fi
+
+      - name: Build JAR with Maven
+        run: mvn -B clean package -DskipTests
+
+      - name: Upload JAR as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: text-transformer-app-${{ steps.get_version.outputs.CURRENT_VERSION }}
+          path: target/*.jar
