@@ -1,4 +1,4 @@
-name: Build, Tag, and Save JAR
+name: Build, Tag, and Release (JAR & Docs)
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ "main", "master" ]
 
 jobs:
-  build-jar:
+  build-and-release:
     runs-on: ubuntu-latest
 
     permissions:
@@ -32,12 +32,29 @@ jobs:
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           echo "CURRENT_VERSION=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Build JAR and Javadocs
+        run: mvn -B clean package javadoc:javadoc javadoc:jar
+
+      - name: Upload JAR artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: text-transformer-app-${{ steps.get_version.outputs.CURRENT_VERSION }}
+          path: target/*.jar
+          retention-days: 7
+
+      - name: Upload HTML Documentation for download
+        uses: actions/upload-artifact@v4
+        with:
+          name: javadoc-documentation
+          path: target/site/apidocs/
+          retention-days: 7
+
       - name: Create and Push Git Tag
         if: github.event_name == 'push' && !contains(steps.get_version.outputs.CURRENT_VERSION, 'SNAPSHOT')
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          
+
           TAG_NAME="v${{ steps.get_version.outputs.CURRENT_VERSION }}"
 
           if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
@@ -48,11 +65,14 @@ jobs:
             git push origin "$TAG_NAME"
           fi
 
-      - name: Build JAR with Maven
-        run: mvn -B clean package -DskipTests
-
-      - name: Upload JAR as artifact
-        uses: actions/upload-artifact@v4
+      - name: Create GitHub Release
+        if: github.event_name == 'push' && !contains(steps.get_version.outputs.CURRENT_VERSION, 'SNAPSHOT')
+        uses: softprops/action-gh-release@v2
         with:
-          name: text-transformer-app-${{ steps.get_version.outputs.CURRENT_VERSION }}
-          path: target/*.jar
+          tag_name: v${{ steps.get_version.outputs.CURRENT_VERSION }}
+          name: Release v${{ steps.get_version.outputs.CURRENT_VERSION }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            target/*.jar
