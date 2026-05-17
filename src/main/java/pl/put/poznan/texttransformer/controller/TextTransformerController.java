@@ -2,6 +2,8 @@ package pl.put.poznan.texttransformer.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.put.poznan.texttransformer.dto.TransformationRequest;
 import pl.put.poznan.texttransformer.dto.TransformationResponse;
@@ -11,7 +13,7 @@ import pl.put.poznan.texttransformer.service.decoratorfactory.TransformationDeco
 import java.util.Arrays;
 
 @RestController
-@RequestMapping("/{text}")
+@RequestMapping("/transform")
 public class TextTransformerController {
 
     private static final Logger logger = LoggerFactory.getLogger(TextTransformerController.class);
@@ -22,29 +24,20 @@ public class TextTransformerController {
         this.pipelineFactory = pipelineFactory;
     }
 
-    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public String get(@PathVariable String text,
-            @RequestParam(value = "transforms", defaultValue = "upper,escape") String[] transforms) {
+    @PostMapping
+    public ResponseEntity<TransformationResponse> post(@RequestBody TransformationRequest request) {
 
-        // log the parameters
-        logger.debug(text);
-        logger.debug(Arrays.toString(transforms));
+        logger.debug("Request recieved: Text: \"{}\" Transformations: {}", request.getText(), request.getTransformation());
 
-        return "Todo";
+        try {
+            TransformerService pipeline = pipelineFactory.buildPipeline(request.getTransformation());
+            String result = pipeline.transform(request.getText());
+
+            return new ResponseEntity<>(new TransformationResponse(result), HttpStatus.OK);
+        } catch (IllegalArgumentException ie) {
+            TransformationResponse resp = new TransformationResponse("");
+            resp.setError("illegal transformation passed");
+            return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+        }
     }
-
-    @RequestMapping(method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    public TransformationResponse post(@PathVariable String text,
-            @RequestBody TransformationRequest request) {
-
-        // log the parameters
-        logger.debug(text);
-        logger.debug(Arrays.toString(request.getTransformation()));
-
-        TransformerService pipeline = pipelineFactory.buildPipeline(request.getTransformation());
-        String result = pipeline.transform(text);
-
-        return new TransformationResponse(result);
-    }
-
 }
