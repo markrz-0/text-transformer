@@ -12,6 +12,19 @@ public class ReverseTransformerService extends TransformerService {
 
     @Override
     public String transform(String text) {
-        return new StringBuilder(text).reverse().toString();
+        boolean[] upperCase = new boolean[text.length()];
+        for (int i = 0; i < text.length(); i++) {
+            upperCase[i] = Character.isUpperCase(text.charAt(i));
+        }
+
+        String reversed = new StringBuilder(text).reverse().toString();
+
+        StringBuilder result = new StringBuilder(reversed.length());
+        for (int i = 0; i < reversed.length(); i++) {
+            char c = reversed.charAt(i);
+            result.append(upperCase[i] ? Character.toUpperCase(c) : Character.toLowerCase(c));
+        }
+
+        return result.toString();
     }
 }
