@@ -14,7 +14,7 @@
     <groupId>pl.put.poznan</groupId>
     <artifactId>text-transformer</artifactId>
     <name>Text Transformer App</name>
-    <version>0.4</version>
+    <version>0.4.1</version>
 
 	<properties>
         <java.version>11</java.version>
