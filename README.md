@@ -41,3 +41,4 @@ Returns JSON
 |`expand`|expands acronyms to full forms with case preservation|`prof.` -> `professor`, `dr` -> `doctor`, `e.g.` -> `for example`, `aso` -> `and so on`. Preserves case: `E.g.` -> `For example`, `E.G.` -> `FOR EXAMPLE`|
 |`shorten`|shortens phrases to acronyms with case preservation|`for example` -> `e.g.`, `among others` -> `i.a.`, `and so on` -> `aso`. Preserves case: `For example` -> `E.g.`, `FOR EXAMPLE` -> `E.G.`|
 |`latex`|escapes special characters for LaTeX format|`John Smith & Sons` -> `John Smith \& Sons`, `Price is $100` -> `Price is \$100`|
+|`number-to-text`|converts numbers to English text representation|`donate 100 dollars` -> `donate one hundred dollars`, `price 12.50` -> `price twelve point five zero`. Supports integers 0-1000 and decimals to hundredths|
