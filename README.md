@@ -15,7 +15,7 @@ Accepts JSON:
     "transformation": [
         "array of",
         "different transformation names",
-        "they will be applied in order"
+        "they will be applied in order",
         "see below"
     ]
 }
@@ -38,3 +38,4 @@ Returns JSON
 |`capitalize`|capitalizes every word|`teXt tExT` -> `Text Text`|
 |`reverse`|reverse the order of letters while preserving the case|`MirEk` -> `KerIm`|
 |`repeated-words`|removes consecutive repeated words|`my my super super super text` -> `my super text`|
+|`expand`|expands acronyms to full forms with case preservation|`prof.` -> `professor`, `dr` -> `doctor`, `e.g.` -> `for example`, `aso` -> `and so on`. Preserves case: `E.g.` -> `For example`, `E.G.` -> `FOR EXAMPLE`|
