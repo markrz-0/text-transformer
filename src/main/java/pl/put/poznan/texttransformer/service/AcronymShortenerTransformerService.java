@@ -75,10 +75,7 @@ public class AcronymShortenerTransformerService extends TransformerService {
         if (allUpperCase) {
             return acronym.toUpperCase();
         } else if (firstUpperCase) {
-            if (acronym.length() > 0) {
-                return Character.toUpperCase(acronym.charAt(0)) + acronym.substring(1);
-            }
-            return acronym;
+            return Character.toUpperCase(acronym.charAt(0)) + acronym.substring(1);
         } else {
             return acronym.toLowerCase();
         }
