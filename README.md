@@ -1,7 +1,6 @@
 # Text Transformer
 
-![build jar](https://github.com/markrz-0/text-transformer/actions/workflows/build-jar.yml/badge.svg)
-![build documentation](https://github.com/markrz-0/text-transformer/actions/workflows/javadoc.yml/badge.svg)
+![build jar and docs](https://github.com/markrz-0/text-transformer/actions/workflows/build.yml/badge.svg)
 
 For people working with text data, our Text Transformer application will allow you to transform text data (e.g. change case, eliminate duplicates, etc.). The application will be available via GUI as well as remote API, thanks to which it will be possible to integrate it with existing tools.
 
