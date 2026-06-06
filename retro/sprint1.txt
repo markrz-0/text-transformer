@@ -1,0 +1,6 @@
+The good:
+- good planning
+- good team coop
+
+The bad:
+- no documentation (javadoc) in most files
