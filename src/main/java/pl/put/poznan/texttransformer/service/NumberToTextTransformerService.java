@@ -5,6 +5,11 @@ import org.springframework.stereotype.Service;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Service responsible for converting numbers to their text representations.
+ * It extends {@link TransformerService} and overrides the {@code transform} method
+ * to find integers and decimals within the text and replace them with words.
+ */
 @Service
 public class NumberToTextTransformerService extends TransformerService {
 
@@ -23,11 +28,23 @@ public class NumberToTextTransformerService extends TransformerService {
         "five hundred", "six hundred", "seven hundred", "eight hundred", "nine hundred"
     };
 
+    /**
+     * Retrieves the specific name of this transformer.
+     *
+     * @return the name of the transformer ("numbers")
+     */
     @Override
     public String getName() {
         return "number-to-text";
     }
 
+    /**
+     * Transforms the given text by converting numerical digits (integers and decimals)
+     * into their English word equivalents.
+     *
+     * @param text the input string to be transformed
+     * @return the transformed string with numbers converted to text
+     */
     @Override
     public String transform(String text) {
         if (text == null || text.isEmpty()) {

@@ -7,11 +7,20 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Service responsible for expanding specific acronyms into their full phrases.
+ * It extends {@link TransformerService} and overrides the {@code transform} method
+ * to identify acronyms like "prof." or "e.g." and replace them with their full
+ * word equivalents while preserving the original case formatting.
+ */
 @Service
 public class AcronymExpanderTransformerService extends TransformerService {
 
     private final Map<String, String> acronymMap;
 
+    /**
+     * Constructs a new AcronymExpanderTransformerService and initializes the acronym-to-phrase map.
+     */
     public AcronymExpanderTransformerService() {
         this.acronymMap = new HashMap<>();
         acronymMap.put("prof.", "professor");
@@ -20,11 +29,23 @@ public class AcronymExpanderTransformerService extends TransformerService {
         acronymMap.put("aso", "and so on");
     }
 
+    /**
+     * Retrieves the specific name of this transformer.
+     *
+     * @return the name of the transformer ("expand")
+     */
     @Override
     public String getName() {
         return "expand";
     }
 
+    /**
+     * Transforms the given text by expanding known acronyms into full phrases.
+     * Preserves capitalization (e.g., "Prof." -> "Professor", "PROF." -> "PROFESSOR").
+     *
+     * @param text the input string to be transformed
+     * @return the transformed string with acronyms expanded
+     */
     @Override
     public String transform(String text) {
         if (text == null || text.isEmpty()) {
