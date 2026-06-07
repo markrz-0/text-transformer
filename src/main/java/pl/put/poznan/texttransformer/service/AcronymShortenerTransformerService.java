@@ -7,11 +7,20 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Service responsible for shortening specific phrases into their acronym equivalents.
+ * It extends {@link TransformerService} and overrides the {@code transform} method
+ * to identify phrases like "for example" and replace them with "e.g." while
+ * preserving the original case formatting.
+ */
 @Service
 public class AcronymShortenerTransformerService extends TransformerService {
 
     private final Map<String, String> phraseToAcronymMap;
 
+    /**
+     * Constructs a new AcronymShortenerTransformerService and initializes the phrase-to-acronym map.
+     */
     public AcronymShortenerTransformerService() {
         this.phraseToAcronymMap = new LinkedHashMap<>();
         phraseToAcronymMap.put("for example", "e.g.");
@@ -19,11 +28,23 @@ public class AcronymShortenerTransformerService extends TransformerService {
         phraseToAcronymMap.put("and so on", "aso");
     }
 
+    /**
+     * Retrieves the specific name of this transformer.
+     *
+     * @return the name of the transformer ("shorten")
+     */
     @Override
     public String getName() {
         return "shorten";
     }
 
+    /**
+     * Transforms the given text by shortening known phrases to acronyms.
+     * Preserves capitalization (e.g., "For example" -> "E.g.", "FOR EXAMPLE" -> "E.G.").
+     *
+     * @param text the input string to be transformed
+     * @return the transformed string with phrases shortened
+     */
     @Override
     public String transform(String text) {
         if (text == null || text.isEmpty()) {
