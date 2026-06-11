@@ -1,0 +1,6 @@
+The good:
+- good planning
+- good team coop
+
+Improvements
+- added documentation for many files
